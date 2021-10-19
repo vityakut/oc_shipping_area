@@ -25,20 +25,7 @@
       </div>
       <div class="panel-body">
         <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-shipping" class="form-horizontal">
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-night">{{ entry_night }}</label>
-            <div class="col-sm-10">
-              <select name="shipping_area_night" id="input-night" class="form-control">
-                {% if shipping_area_night %}
-                  <option value="1" selected="selected">{{ text_enabled }}</option>
-                  <option value="0">{{ text_disabled }}</option>
-                {% else %}
-                  <option value="1">{{ text_enabled }}</option>
-                  <option value="0" selected="selected">{{ text_disabled }}</option>
-                {% endif %}
-              </select>
-            </div>
-          </div>
+
           <fieldset>
             <legend>{{ text_settings }}</legend>
             <div class="form-group">
@@ -86,6 +73,20 @@
               </div>
             </div>
             <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-night">{{ entry_night }}</label>
+              <div class="col-sm-10">
+                <select name="shipping_area_night" id="input-night" class="form-control" onchange="toggleCostNight($(this).val());">
+                  {% if shipping_area_night %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                  {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
               <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
               <div class="col-sm-10">
                 <input type="text" name="shipping_area_sort_order" value="{{ shipping_area_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
@@ -97,21 +98,19 @@
             <legend>{{ text_areas }}</legend>
             <table id="shipping-areas" class="table table-striped table-bordered table-hover">
               <thead>
-              <tr>
-                <td class="text-left required">{{ entry_area }}</td>
-                <td class="text-left">{{ entry_description }}</td>
-                <td class="text-center">{{ entry_cost }}</td>
-                {% if shipping_area_night %}
-                  <td class="text-right">{{ entry_cost_night }}</td>
-                {% endif %}
-                <td></td>
-              </tr>
+                <tr>
+                  <td class="text-left required">{{ entry_area }}</td>
+                  <td class="text-left">{{ entry_description }}</td>
+                  <td class="text-center">{{ entry_cost }}</td>
+                  <td class="text-right shipping_area_cost_night {% if not shipping_area_night %}hidden{% endif %}">{{ entry_cost_night }}</td>
+                  <td></td>
+                </tr>
               </thead>
               <tbody>
 
                 {% for areas in shipping_area_areas %}
                   {% set shipping_area_row = 0 %}
-                  <tr id="option-value-row{{ shipping_area_row }}">
+                  <tr id="shipping-areas-row{{ shipping_area_row }}">
                     <td class="text-center">
                       <input type="hidden" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_id]" value="{{ areas.shipping_area_id }}" />
                       <div class="input-group">
@@ -137,28 +136,25 @@
                         <div class="text-danger">{{ error_shipping_cost[option_value_row] }}</div>
                       {% endif %}
                     </td>
-                    {% if shipping_area_night %}
-                      <td class="text-center">
-                        <div class="input-group">
-                          <input type="text" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_cost_night]" value="{{ areas.shipping_area_cost_night }}" placeholder="{{ entry_cost_night }}" class="form-control" />
-                        </div>
-                        {% if error_shipping_cost_night[option_value_row] %}
-                          <div class="text-danger">{{ error_shipping_cost_night[option_value_row] }}</div>
-                        {% endif %}
-                      </td>
-                    {% endif %}
-
-                    <td class="text-right"><button type="button" onclick="$('#option-value-row{{ shipping_area_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+                    <td class="text-center shipping_area_cost_night {% if not shipping_area_night %}hidden{% endif %}">
+                      <div class="input-group">
+                        <input type="text" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_cost_night]" value="{{ areas.shipping_area_cost_night }}" placeholder="{{ entry_cost_night }}" class="form-control" />
+                      </div>
+                      {% if error_shipping_cost_night[option_value_row] %}
+                        <div class="text-danger">{{ error_shipping_cost_night[option_value_row] }}</div>
+                      {% endif %}
+                    </td>
+                    <td class="text-right"><button type="button" onclick="$('#shipping-areas-row{{ shipping_area_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
                   </tr>
                   {% set shipping_area_row = shipping_area_row + 1 %}
                 {% endfor %}
               </tbody>
 
               <tfoot>
-              <tr>
-                <td colspan="4"></td>
-                <td class="text-right"><button type="button" onclick="addShippingArea();" data-toggle="tooltip" title="{{ button_option_value_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
-              </tr>
+                <tr>
+                  <td class="blank" colspan="{% if shipping_area_night %}4{% else %}3{% endif %}"></td>
+                  <td class="text-right"><button type="button" onclick="addShippingArea();" data-toggle="tooltip" title="{{ button_shipping_area_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                </tr>
               </tfoot>
             </table>
           </fieldset>
@@ -170,26 +166,46 @@
   </div>
 
   <script type="text/javascript"><!--
-
-   var shipping_area_row = {{ shipping_area_row }};
+    var shipping_area_row = {{ shipping_area_row }};
+    var shipping_area_night = {{ shipping_area_night }};
 
     function addShippingArea() {
-      html  = '<tr id="option-value-row' + shipping_area_row + '">';
-      html += '  <td class="text-left"><input type="hidden" name="option_value[' + option_value_row + '][option_value_id]" value="" />';
-      {% for language in languages %}
-      html += '    <div class="input-group">';
-      html += '      <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span><input type="text" name="option_value[' + option_value_row + '][option_value_description][{{ language.language_id }}][name]" value="" placeholder="{{ entry_option_value }}" class="form-control" />';
-      html += '    </div>';
-      {% endfor %}
-      html += '  </td>';
-      html += '  <td class="text-center"><a href="" id="thumb-image' + option_value_row + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="option_value[' + option_value_row + '][image]" value="" id="input-image' + option_value_row + '" /></td>';
-      html += '  <td class="text-right"><input type="text" name="option_value[' + option_value_row + '][sort_order]" value="" placeholder="{{ entry_sort_order }}" class="form-control" /></td>';
-      html += '  <td class="text-right"><button type="button" onclick="$(\'#option-value-row' + option_value_row + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+      html = '<tr id="shipping-areas-row{{ shipping_area_row }}">';
+      html += '<td class="text-center"><input type="hidden" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_id]" value="" />';
+      html += '<div class="input-group">';
+      html += '<input type="text" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_name]" value="" placeholder="{{ entry_area }}" class="form-control" />';
+      html += '</div></td>';
+      html += '<td class="text-center"><div class="input-group">';
+      html += '<input type="text" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_description]" value="" placeholder="{{ entry_description }}" class="form-control" />';
+      html += '</div></td>';
+      html += '<td class="text-center"><div class="input-group">';
+      html += '<input type="text" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_cost]" value="" placeholder="{{ entry_cost }}" class="form-control" />';
+      html += '</div></td>';
+      html += '<td class="text-center shipping_area_cost_night"><div class="input-group">';
+      html += '<input type="text" name="shipping_area_areas[{{ shipping_area_row }}][shipping_area_cost_night]" value="" placeholder="{{ entry_cost_night }}" class="form-control" />';
+      html += '</div></td>';
+      html += '<td class="text-right">';
+      html += '<button type="button" onclick="$(\'#shipping-areas-row{{ shipping_area_row }}\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
       html += '</tr>';
 
-      $('#option-value tbody').append(html);
+      $('#shipping-areas tbody').append(html);
 
+      if (!shipping_area_night){
+        $("#shipping-areas td.shipping_area_cost_night").addClass("hidden");
+      }
       shipping_area_row++;
+    }
+
+    function toggleCostNight(night) {
+      shipping_area_night = parseInt(night);
+      if (shipping_area_night){
+        $("#shipping-areas td.shipping_area_cost_night").removeClass("hidden");
+      } else {
+        $("#shipping-areas td.shipping_area_cost_night").addClass("hidden");
+      }
+      $('#shipping-areas tfoot td.blank').attr('colspan', function(index, attr){
+        return (attr == '4') ? '3' : '4';
+    });
     }
     //--></script>
 
