@@ -88,14 +88,14 @@ class ControllerExtensionShippingArea extends Controller {
 			$data['shipping_area_sort_order'] = $this->config->get('shipping_area_sort_order');
 		}
 
-        $this->load->model('extension/shipping/area');
-        $result = $this->model_extension_shipping_area->getAreas();
-        var_dump($result);
-        $data['shipping_area_areas'] = array();
-        if ($result){
-            $data['shipping_area_areas'] = $result;
-        }
-        $data['shipping_area_row'] = count($result);
+        if (isset($this->request->post['shipping_area_areas'])) {
+			$data['shipping_area_areas'] = $this->request->post['shipping_area_areas'];
+            var_dump($data['shipping_area_areas']);
+		} else {
+			$data['shipping_area_areas'] = $this->config->get('shipping_area_areas');
+		}
+
+        $data['shipping_area_row'] = count($data['shipping_area_areas']);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -105,22 +105,26 @@ class ControllerExtensionShippingArea extends Controller {
 	}
 
 	protected function validate() {
+//        TODO: validate
 		if (!$this->user->hasPermission('modify', 'extension/shipping/area')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
+        foreach ($this->request->post['shipping_area_areas'] as $area_id => $value) {
+            if ((utf8_strlen($value['name']) < 1) || (utf8_strlen($value['name']) > 128)) {
+                $this->error['name'][$area_id] = $this->language->get('error_name');
+            }
+            if (utf8_strlen($value['description']) > 256) {
+                $this->error['description'][$area_id] = $this->language->get('error_description');
+            }
+            if (!is_numeric($value['cost'])) {
+                $this->error['cost'][$area_id] = $this->language->get('error_cost');
+            }
+            if (!is_numeric($value['cost_night'])) {
+                $this->error['cost_night'][$area_id] = $this->language->get('error_cost_night');
+            }
+        }
 		return !$this->error;
 	}
 
-    public function install()
-    {
-        $this->load->model('extension/shipping/area');
-        $this->model_extension_shipping_area->install();
-    }
 
-    public function uninstall()
-    {
-        $this->load->model('extension/shipping/area');
-        $this->model_extension_shipping_area->uninstall();
-    }
 }
