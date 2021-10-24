@@ -90,9 +90,18 @@ class ControllerExtensionShippingArea extends Controller {
 
         if (isset($this->request->post['shipping_area_areas'])) {
 			$data['shipping_area_areas'] = $this->request->post['shipping_area_areas'];
-            var_dump($data['shipping_area_areas']);
 		} else {
 			$data['shipping_area_areas'] = $this->config->get('shipping_area_areas');
+		}
+        if (isset($this->request->post['shipping_area_night_time_e'])) {
+			$data['shipping_area_night_time_e'] = $this->request->post['shipping_area_night_time_e'];
+		} else {
+			$data['shipping_area_night_time_e'] = $this->config->get('shipping_area_night_time_e');
+		}
+        if (isset($this->request->post['shipping_area_night_time_s'])) {
+			$data['shipping_area_night_time_s'] = $this->request->post['shipping_area_night_time_s'];
+		} else {
+			$data['shipping_area_night_time_s'] = $this->config->get('shipping_area_night_time_s');
 		}
 
         $data['shipping_area_row'] = count($data['shipping_area_areas']);
@@ -123,6 +132,13 @@ class ControllerExtensionShippingArea extends Controller {
                 $this->error['cost_night'][$area_id] = $this->language->get('error_cost_night');
             }
         }
+        if (!preg_match("/\d\d:\d\d/", $this->request->post['shipping_area_night_time_e'])){
+            $this->error['night_time'] = $this->language->get('error_night_time');
+        }
+        if (!preg_match("/\d\d:\d\d/", $this->request->post['shipping_area_night_time_s'])){
+            $this->error['night_time'] = $this->language->get('error_night_time');
+        }
+
 		return !$this->error;
 	}
 

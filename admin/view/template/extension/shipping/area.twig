@@ -86,7 +86,24 @@
                 </select>
               </div>
             </div>
-{#            TODO: добавит время ночной доставки #}
+            <div class="form-group js-shipping_area_cost_night {% if not shipping_area_night %}hidden{% endif %}">
+              <label class="col-sm-2 control-label" for="input-night_time">{{ entry_night_time }}</label>
+              <div class="col-sm-2">
+                <input type="time" name="shipping_area_night_time_s" value="{{ shipping_area_night_time_s }}" placeholder="{{ entry_night_time_s }}" id="entry-night-time-s" class="form-control" />
+                {% if error_shipping_area_night_time_s %}
+                  <div class="text-danger">{{ error_error_night_time }}</div>
+                {% endif %}
+              </div>
+              <div class="col-sm-1 text-center">
+                <span>-</span>
+              </div>
+              <div class="col-sm-2">
+                <input type="time" name="shipping_area_night_time_e" value="{{ shipping_area_night_time_e }}" placeholder="{{ entry_night_time_e }}" id="entry-night-time-e" class="form-control" />
+                {% if error_shipping_area_night_time_e %}
+                  <div class="text-danger">{{ error_error_night_time }}</div>
+                {% endif %}
+              </div>
+            </div>
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
               <div class="col-sm-10">
@@ -103,7 +120,7 @@
                   <td class="text-left required">{{ entry_area }}</td>
                   <td class="text-left">{{ entry_description }}</td>
                   <td class="text-center">{{ entry_cost }}</td>
-                  <td class="text-right shipping_area_cost_night {% if not shipping_area_night %}hidden{% endif %}">{{ entry_cost_night }}</td>
+                  <td class="text-right js-shipping_area_cost_night {% if not shipping_area_night %}hidden{% endif %}">{{ entry_cost_night }}</td>
                   <td></td>
                 </tr>
               </thead>
@@ -136,7 +153,7 @@
                         <div class="text-danger">{{ error_shipping_cost[option_value_row] }}</div>
                       {% endif %}
                     </td>
-                    <td class="text-center shipping_area_cost_night {% if not shipping_area_night %}hidden{% endif %}">
+                    <td class="text-center js-shipping_area_cost_night {% if not shipping_area_night %}hidden{% endif %}">
                       <div class="input-group">
                         <input type="text" name="shipping_area_areas[{{ shipping_area_row }}][cost_night]" value="{{ area.cost_night }}" placeholder="{{ entry_cost_night }}" class="form-control" />
                       </div>
@@ -198,9 +215,9 @@
     function toggleCostNight(night) {
       shipping_area_night = parseInt(night);
       if (shipping_area_night){
-        $("#shipping-areas td.shipping_area_cost_night").removeClass("hidden");
+        $(".js-shipping_area_cost_night").removeClass("hidden");
       } else {
-        $("#shipping-areas td.shipping_area_cost_night").addClass("hidden");
+        $(".js-shipping_area_cost_night").addClass("hidden");
       }
       $('#shipping-areas tfoot td.blank').attr('colspan', function(index, attr){
         return (attr == '4') ? '3' : '4';
