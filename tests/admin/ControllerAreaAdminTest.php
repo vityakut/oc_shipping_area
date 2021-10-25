@@ -26,7 +26,7 @@ class ControllerAreaAdminTest extends \TestCase
         $this->login('admin', 'admin');
 
         $response = $this->dispatchAction('extension/shipping/area');
-        $this->assertRegExp('/Доставка по зонам/', $response->getOutput());
+        $this->assertRegExp('/Area Shipping/', $response->getOutput());
         $this->logout();
 
     }
