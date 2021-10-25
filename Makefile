@@ -6,8 +6,7 @@ ARCHIVE_NAME = '/tmp/${PACKAGE_NAME}-$(VERSION).ocmod.zip'
 all: build_archive send_to_ftp delete_archive
 
 build_archive:
-	cd src
-	zip -r $(ARCHIVE_NAME) *
+	zip -r $(ARCHIVE_NAME) ./src/upload/*
 
 send_to_ftp:
 	curl -T $(ARCHIVE_NAME) -u $(FTP_USER):$(FTP_PASSWORD) ftp://$(FTP_HOST)
