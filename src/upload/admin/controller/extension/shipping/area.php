@@ -90,9 +90,12 @@ class ControllerExtensionShippingArea extends Controller {
 
         if (isset($this->request->post['shipping_area_areas'])) {
 			$data['shipping_area_areas'] = $this->request->post['shipping_area_areas'];
-		} else {
+		} elseif ($this->config->get('shipping_area_areas')) {
 			$data['shipping_area_areas'] = $this->config->get('shipping_area_areas');
+		} else {
+			$data['shipping_area_areas'] = [];
 		}
+
         if (isset($this->request->post['shipping_area_night_time_e'])) {
 			$data['shipping_area_night_time_e'] = $this->request->post['shipping_area_night_time_e'];
 		} else {

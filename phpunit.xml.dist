@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false">
+    <testsuites>
+        <testsuite name="catalog-tests">
+            <directory suffix="CatalogTest.php">./tests/catalog/</directory>
+        </testsuite>
+        <testsuite name="admin-tests">
+            <directory suffix="AdminTest.php">./tests/admin/</directory>
+        </testsuite>
+        <testsuite name="system-tests">
+            <directory suffix="Test.php">./tests/system/</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="OC_ROOT" value="./www/" />
+        <env name="HTTP_SERVER" value="http://localhost:80/" />
+        <env name="TEST_CONFIG" value="test-config" />
+    </php>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix="area.php">./www/admin/controller</directory>
+            <directory>./www/admin/model/extension/area</directory>
+            <directory suffix="area.php">./www/catalog/controller</directory>
+            <directory suffix="daemon_collector.php">./www/catalog/controller</directory>
+            <directory>./www/catalog/model/extension/area</directory>
+            <directory suffix=".php">./www/system/library/area</directory>
+            <exclude>
+                <directory suffix=".php">./www/system/library/area/lib/api</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
