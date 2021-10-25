@@ -7,6 +7,9 @@ on:
     tags-ignore:
       - '*.*'
   pull_request:
+     branches: 
+      - 'master'
+      - 'develop'
 
 env:
   OC_DB_HOSTNAME: 127.0.0.1
@@ -88,7 +91,7 @@ jobs:
         run: make phpcomp
   release:
     needs: ['phpcs']
-    if: github.repository_owner == 'vityakut' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
+    if: github.event_name == 'push' && github.repository_owner == 'vityakut' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
