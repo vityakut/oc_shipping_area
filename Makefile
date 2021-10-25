@@ -1,5 +1,5 @@
 ROOT_DIR=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-ARCHIVE_NAME = '/tmp/oc_shipping_area-'$(VERSION)'.ocmod.zip'
+ARCHIVE_NAME = '/tmp/oc_shipping_area-$(VERSION).ocmod.zip'
 
 .PHONY: coverage
 
