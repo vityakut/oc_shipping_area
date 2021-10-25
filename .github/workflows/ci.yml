@@ -36,6 +36,15 @@ jobs:
           - php-version: '7.4'
             test-suite: '3'
             oc: '3.0.3.7'
+          - php-version: '7.0'
+            test-suite: '3'
+            oc: '3.0.3.8'
+          - php-version: '7.2'
+            test-suite: '3'
+            oc: '3.0.3.8'
+          - php-version: '7.3'
+            test-suite: '3'
+            oc: '3.0.3.8'
           - php-version: '7.4'
             test-suite: '3'
             oc: '3.0.3.8'
@@ -76,7 +85,7 @@ jobs:
           make coverage
           bash <(curl -s https://codecov.io/bash)
   phpcs:
-    needs: ['test']
+    needs: []
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
