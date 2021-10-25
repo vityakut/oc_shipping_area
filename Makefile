@@ -7,6 +7,7 @@ all: build_archive send_to_ftp delete_archive
 
 build_archive:
 	cd ./src
+	ls
 	zip -r $(ARCHIVE_NAME) ./upload/*
 
 send_to_ftp:
