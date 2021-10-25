@@ -82,7 +82,7 @@ jobs:
         run: make phpcomp
   release:
     needs: ['phpcs']
-    if: github.repository_owner == 'vityakut' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
+    if: github.repository_owner == 'vityakut'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
