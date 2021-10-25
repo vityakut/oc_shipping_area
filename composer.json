@@ -1,0 +1,38 @@
+{
+    "name": "vityakut/oc_shipping_area",
+    "description": "Module for Opencart",
+    "license": "GPL-3.0",
+    "type": "project",
+    "authors": [
+        {
+            "name": "vityakut",
+            "email": "vityakut@gmail.com"
+        }
+    ],
+    "config": {
+      "bin-dir": "bin/",
+      "preferred-install": "source"
+    },
+    "extra": {
+      "opencart-dir" : "www"
+    },
+    "scripts" : {
+      "test-admin": "bin/phpunit --coverage-php coverage/admin.cov --testsuite admin-tests --colors=always",
+      "test-catalog": "bin/phpunit --coverage-php coverage/catalog.cov --testsuite catalog-tests --colors=always",
+      "test-system": "bin/phpunit --coverage-php coverage/system.cov --testsuite system-tests --colors=always",
+      "test": [
+        "@test-admin",
+        "@test-catalog",
+        "@test-system"
+      ],
+      "opencart:install" : "bin/robo --load-from tests/RoboFile.php opencart:install"
+    },
+    "require": {
+      "ext-json": "*"
+    },
+    "require-dev": {
+      "consolidation/robo": "~1.0",
+      "phpcompatibility/php-compatibility": "^9.3",
+      "beyondit/opencart-test-suite": "~3.0"
+    }
+}
