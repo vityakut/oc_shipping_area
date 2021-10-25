@@ -81,7 +81,7 @@ jobs:
       - name: Check compatibility
         run: make phpcomp
   release:
-    needs: []
+    needs: ['phpcs']
     if: github.event_name == 'push' && github.repository_owner == 'vityakut'
     runs-on: ubuntu-latest
     steps:
