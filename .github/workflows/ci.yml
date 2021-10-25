@@ -95,13 +95,12 @@ jobs:
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.6
         with:
-          default_bump: "patch"
-          release_branches : "master,develop,release/*,ci"
+          release_branches : "master,develop,release/*"
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build release
         run: |
           git fetch origin --unshallow --tags
-          export LAST_TAG=`git describe --abbrev=0 --tags`
+          export LAST_TAG=${{ steps.tag_version.outputs.previous_tag }}
           export RELEASE_TAG=${{ steps.tag_version.outputs.new_tag }}
           export VERSION=${{ steps.tag_version.outputs.new_version }}
           export PACKAGE_NAME=oc_shipping_area
@@ -127,6 +126,7 @@ jobs:
           prerelease: false
       - name: Upload Release Asset
         id: upload-release-asset
+        if: env.LAST_TAG != env.RELEASE_TAG
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -136,4 +136,5 @@ jobs:
           asset_name: ${{ env.ARCHIVE_NAME }}
           asset_content_type: application/zip
       - name: Cleanup
+        if: env.LAST_TAG != env.RELEASE_TAG
         run: make delete_archive
