@@ -71,10 +71,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup PHP 7.2
+      - name: Setup PHP 7.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.2'
+          php-version: '7.4'
           tools: composer:v1
       - name: Install dependencies
         run: composer install
@@ -86,10 +86,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup PHP 7.2
+      - name: Setup PHP 7.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.2'
+          php-version: '7.4'
           tools: composer:v1
       - name: Bump version and push tag
         id: tag_version
@@ -121,7 +121,7 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           release_name: ${{ env.RELEASE_TAG }}
-          body: ${{ env.LAST_COMMIT }}
+          body: ${{ steps.tag_version.outputs.changelog }}  
           draft: false
           prerelease: false
       - name: Upload Release Asset
