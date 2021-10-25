@@ -82,7 +82,7 @@ jobs:
         run: make phpcomp
   release:
     needs: ['phpcs']
-    if: github.event_name == 'push' && github.repository_owner == 'vityakut'
+    if: github.repository_owner == 'vityakut' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -95,7 +95,7 @@ jobs:
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.6
         with:
-          release_branches : "master,develop,release/*"
+          release_branches : "master,develop"
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build release
         run: |
