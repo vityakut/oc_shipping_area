@@ -103,7 +103,7 @@ jobs:
           git fetch origin --unshallow --tags
           export LAST_TAG=`git describe --abbrev=0 --tags`
           export RELEASE_TAG=${{ steps.tag_version.outputs.new_tag }}
-          export VERSION=$RELEASE_TAG }}
+          export VERSION=$RELEASE_TAG
           export ARCHIVE_NAME=oc_shipping_area-$VERSION.ocmod.zip
           export ARCHIVE_PATH="/tmp/$ARCHIVE_NAME"
           export LAST_COMMIT=`git log --oneline --format=%B -n 1 HEAD | head -n 1`
