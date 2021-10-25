@@ -17,17 +17,34 @@ class ModelExtensionShippingArea extends Model {
 
 		if ($status) {
 			$quote_data = array();
+            $total = $this->cart->getTotal();
+            $area_total = $this->config->get('shipping_area_total');
             if ($this->config->get('shipping_area_areas')){
                 foreach ($this->config->get('shipping_area_areas') as $i => $area) {
                     $cost = $area['cost'];
-                    $quote_data['area'. $i] = array(
-                        'code'         => 'area.area' . $i,
-                        'title'        => $area['name'] . '<br><span class="shippingFree">' . $area['description'] . '</span>',
+                    $code = 'area'. $i;
+                    $title = $area['name'];
+                    if ($area_total && $area['cost_total'] !== ''){
+                        if ($total < $area_total){
+                            $title .= sprintf(
+                                '<br><span class="shippingFree">'. $this->language->get('text_second_description') .'</span>',
+                                ($area['cost_total'] ? $this->currency->format($this->tax->calculate($area['cost_total'], $this->config->get('shipping_area_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency']) : $this->language->get('text_free')),
+                                $this->currency->format($this->tax->calculate($area_total, $this->config->get('shipping_area_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'])
+                            );
+                        } else{
+                            $cost = $area['cost_total'];
+                        }
+                    }
+                    if ($area['description']){
+                        $title .= '<br><span class="shippingFree">' . $area['description'] . '</span>';
+                    }
+                    $quote_data[$code] = array(
+                        'code'         => 'area.' . $code,
+                        'title'        =>  $title,
                         'cost'         => $area['cost'],
                         'tax_class_id' => $this->config->get('shipping_area_tax_class_id'),
                         'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('shipping_area_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'])
                     );
-
                 }
             }
             $method_data = array(
