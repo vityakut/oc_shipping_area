@@ -91,7 +91,7 @@ jobs:
         run: make phpcomp
   release:
     needs: ['phpcs']
-    if: github.event_name == 'push' && github.repository_owner == 'vityakut' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
+    if: github.event_name == 'push' && github.repository_owner == 'vityakut'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -107,6 +107,7 @@ jobs:
           release_branches : "master,develop"
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build release
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
         run: |
           git fetch origin --unshallow --tags
           export LAST_TAG=${{ steps.tag_version.outputs.previous_tag }}
