@@ -1,8 +1,8 @@
 <?php
 
-// require_once __DIR__ . '/../' . getenv('TEST_SUITE') . '/TestCase.php';
+require_once __DIR__ . '/../' . getenv('TEST_SUITE') . '/TestCase.php';
 
-class ControllerAreaAdminTest extends \Tests\OpenCartTest
+class ControllerAreaAdminTest extends \TestCase
 {
     const MODULE_TITLE = 'area';
 
