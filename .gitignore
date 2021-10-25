@@ -8,3 +8,6 @@
 /bin
 .env
 composer.lock
+/src/upload/*
+*.log
+*.sql

@@ -12,6 +12,7 @@ $_['entry_cost']       = 'Cost';
 $_['entry_tax_class']  = 'Tax Class';
 $_['entry_geo_zone']   = 'Geo Zone';
 $_['entry_status']     = 'Status';
+$_['entry_total']      = 'Step second cost';
 $_['entry_sort_order'] = 'Sort Order';
 $_['entry_time_field'] = 'Time order';
 $_['entry_area']       = 'Area shipping';
@@ -21,6 +22,7 @@ $_['entry_night_time'] = 'Time night';
 $_['entry_night_time_s'] = 'From';
 $_['entry_night_time_e'] = 'To';
 $_['entry_cost_night'] = 'Night cost';
+$_['entry_cost_total'] = 'Second cost';
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify area shipping!';
