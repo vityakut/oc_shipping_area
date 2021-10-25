@@ -45,4 +45,4 @@ phpcs-config:
 	bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility
 
 phpcomp: phpcs-config
-	@bin/phpcs -s -p ./src --standard=PHPCompatibility --runtime-set testVersion 5.2-8.0
+	@bin/phpcs -s -p ./src --standard=PHPCompatibility --runtime-set testVersion 7.0-8.0
