@@ -15,7 +15,8 @@ class ControllerExtensionShippingArea extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/shipping/area', 'user_token=' . $this->session->data['user_token'], true));
+//			$this->response->redirect($this->url->link('extension/shipping/area', 'user_token=' . $this->session->data['user_token'], true));
+            $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true));
 		}
 
 		if (isset($this->error['warning'])) {

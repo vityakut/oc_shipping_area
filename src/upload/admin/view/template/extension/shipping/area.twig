@@ -212,7 +212,10 @@
       html += '<td class="text-center"><div class="input-group">';
       html += '<input type="text" name="shipping_area_areas[' + shipping_area_row + '][cost]" value="" placeholder="{{ entry_cost }}" class="form-control" />';
       html += '</div></td>';
-      html += '<td class="text-center shipping_area_cost_night"><div class="input-group">';
+      html += '<td class="text-center js-shipping_area_cost_total"><div class="input-group">';
+      html += '<input type="text" name="shipping_area_areas[' + shipping_area_row + '][cost_total]" value="" placeholder="{{ entry_cost_total }}" class="form-control" />';
+      html += '</div></td>';
+      html += '<td class="text-center js-shipping_area_cost_night"><div class="input-group">';
       html += '<input type="text" name="shipping_area_areas[' + shipping_area_row + '][cost_night]" value="" placeholder="{{ entry_cost_night }}" class="form-control" />';
       html += '</div></td>';
       html += '<td class="text-right">';
@@ -222,7 +225,10 @@
       $('#shipping-areas tbody').append(html);
 
       if (!shipping_area_night){
-        $("#shipping-areas td.shipping_area_cost_night").addClass("hidden");
+        $("#shipping-areas .js-shipping_area_cost_night").addClass("hidden");
+      }
+      if (!shipping_area_total){
+        $("#shipping-areas .js-shipping_area_cost_total").addClass("hidden");
       }
       shipping_area_row++;
     }
