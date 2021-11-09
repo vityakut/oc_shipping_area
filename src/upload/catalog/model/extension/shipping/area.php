@@ -107,8 +107,5 @@ class ModelExtensionShippingArea extends Model {
 
 		return $method_data;
 	}
-    private function calcPrice($area)
-    {
 
-    }
 }
