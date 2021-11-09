@@ -8,3 +8,8 @@
 /bin
 .env
 composer.lock
+/src/upload/*
+*.log
+*.sql
+!/src/upload/catalog/controller/extension/quickcheckout/shipping_method.php
+!/src/upload/catalog/view/theme/default/template/extension/quickcheckout/shipping_method.twig

@@ -1,4 +1,4 @@
-﻿name: ci
+name: ci
 
 on:
   push:
@@ -91,7 +91,7 @@ jobs:
         run: make phpcomp
   release:
     needs: ['phpcs']
-    if: github.event_name == 'push' && github.repository_owner == 'vityakut'
+    if: github.event_name == 'push' && github.repository_owner == 'vityakut' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -9,12 +9,14 @@ class ControllerExtensionShippingArea extends Controller {
 
 		$this->load->model('setting/setting');
 
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+//		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') ) {
 			$this->model_setting_setting->editSetting('shipping_area', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/shipping/area', 'user_token=' . $this->session->data['user_token'], true));
+//			$this->response->redirect($this->url->link('extension/shipping/area', 'user_token=' . $this->session->data['user_token'], true));
+            $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true));
 		}
 
 		if (isset($this->error['warning'])) {
@@ -52,9 +54,11 @@ class ControllerExtensionShippingArea extends Controller {
 
         if (isset($this->request->post['shipping_area_night'])) {
 			$data['shipping_area_night'] = $this->request->post['shipping_area_night'];
-		} else {
+		} elseif ($this->config->get('shipping_area_night')) {
 			$data['shipping_area_night'] = $this->config->get('shipping_area_night');
-		}
+		} else {
+            $data['shipping_area_night'] = 0;
+        }
 
 		if (isset($this->request->post['shipping_area_tax_class_id'])) {
 			$data['shipping_area_tax_class_id'] = $this->request->post['shipping_area_tax_class_id'];
@@ -86,6 +90,12 @@ class ControllerExtensionShippingArea extends Controller {
 			$data['shipping_area_sort_order'] = $this->request->post['shipping_area_sort_order'];
 		} else {
 			$data['shipping_area_sort_order'] = $this->config->get('shipping_area_sort_order');
+		}
+
+        if (isset($this->request->post['shipping_area_total'])) {
+			$data['shipping_area_total'] = $this->request->post['shipping_area_total'];
+		} else {
+			$data['shipping_area_total'] = $this->config->get('shipping_area_total');
 		}
 
         if (isset($this->request->post['shipping_area_areas'])) {
@@ -121,18 +131,20 @@ class ControllerExtensionShippingArea extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/shipping/area')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-        foreach ($this->request->post['shipping_area_areas'] as $area_id => $value) {
-            if ((utf8_strlen($value['name']) < 1) || (utf8_strlen($value['name']) > 128)) {
-                $this->error['name'][$area_id] = $this->language->get('error_name');
-            }
-            if (utf8_strlen($value['description']) > 256) {
-                $this->error['description'][$area_id] = $this->language->get('error_description');
-            }
-            if (!is_numeric($value['cost'])) {
-                $this->error['cost'][$area_id] = $this->language->get('error_cost');
-            }
-            if (!is_numeric($value['cost_night'])) {
-                $this->error['cost_night'][$area_id] = $this->language->get('error_cost_night');
+        if (isset($this->request->post['shipping_area_areas'])) {
+            foreach ($this->request->post['shipping_area_areas'] as $area_id => $value) {
+                if ((utf8_strlen($value['name']) < 1) || (utf8_strlen($value['name']) > 128)) {
+                    $this->error['name'][$area_id] = $this->language->get('error_name');
+                }
+                if (utf8_strlen($value['description']) > 256) {
+                    $this->error['description'][$area_id] = $this->language->get('error_description');
+                }
+                if (!is_numeric($value['cost'])) {
+                    $this->error['cost'][$area_id] = $this->language->get('error_cost');
+                }
+                if (!is_numeric($value['cost_night'])) {
+                    $this->error['cost_night'][$area_id] = $this->language->get('error_cost_night');
+                }
             }
         }
         if (!preg_match("/\d\d:\d\d/", $this->request->post['shipping_area_night_time_e'])){
