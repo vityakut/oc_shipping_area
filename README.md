@@ -1,6 +1,16 @@
 [![ci](https://github.com/vityakut/oc_shipping_area/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/vityakut/oc_shipping_area/actions/workflows/ci.yml)
-[![release](/github/release/vityakut/oc_shipping_area)](https://github.com/vityakut/oc_shipping_area/releases)
-[![latest-tag](/github/tag/vityakut/oc_shipping_area)]
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/vityakut/oc_shipping_area)
+![latest-tag](https://img.shields.io/github/v/tag/vityakut/oc_shipping_area?colo)
+![GitHub last commit](https://img.shields.io/github/last-commit/vityakut/oc_shipping_area)
+
+![GitHub](https://img.shields.io/github/license/vityakut/oc_shipping_area)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/vityakut/oc_shipping_area?color)
+![GitHub all releases](https://img.shields.io/github/downloads/vityakut/oc_shipping_area/total)
+![PHP](https://img.shields.io/badge/php-%3E%3D7.0-blue)
+![OpenCart](https://img.shields.io/badge/opencart-3-blue)
+
+
+
 
 # Area Shipping
 Модуль доставки с разделением по зонам и стоимостью ночной доставки.
